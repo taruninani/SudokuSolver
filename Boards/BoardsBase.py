@@ -1,9 +1,9 @@
-from SudokuSolver.Utils.Logger import ColoredLogger,getLogger
+from SudokuSolver.Utils import getLogger, Logger
 from typing import List
 import numpy as np
 
 class BoardsBase(object):
-    log : ColoredLogger
+    log : Logger
     ruleSet : List[int]
     board : np.array
     leftValues = None
