@@ -16,3 +16,6 @@ class Logger(object):
 
     def warn(self,string):
         print(string)
+
+    def debug(self,string):
+        print(string)

@@ -64,13 +64,52 @@ self=board.SudokuBoard(input)
 
 
 self=solver.SudokuSolver(self)
+#
+# self.solve()
+#
+# self.board.isBoardComplete()
+#
+# self.board.isBoardValid()
+#
+# self.board.board
 
-self.solve()
 
-self.board.isBoardComplete()
+import SudokuSolver.SudokuBoardMiracle as boardMiracle
 
-self.board.isBoardValid()
+input =[
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 2, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+]
+
+
+input=np.array(input)
+
+self=boardMiracle.SudokuBoardMiracle(input)
+
+#
+# miracle=solver.SudokuSolver(self)
+# miracle.fullIterativePass()
+#
+# miracle.solve()
 
 
 
-self.board.board
+## New structure
+# Possibility.py : class which manages the possibility matrix, input is a ruleset and shape of board
+#
+# rules.py : interface for implementing the rules
+# ClassicRuleSet.py : extends rules.py to create the classic rules of sudoku
+# KnightsRuleSet.py : extends rules.py to create the KNights move Rule set
+# KingsRuleSet.py : extends rules.py to create the Kings move Rule set
+# ...
+#
+# board.py : interface for implementing a Sudoku Board
+# ClassicSudoku.py : inherit board.py with ClassicRulesets
+# MiracleSudoku.py :

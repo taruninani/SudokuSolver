@@ -3,7 +3,7 @@ from SudokuSolver.SudokuBoard import SudokuBoard
 import numpy as np
 
 class SudokuSolver(object):
-    logger=None
+    logger: Logger
     board: SudokuBoard
 
     def log(self,string):
@@ -118,12 +118,12 @@ class SudokuSolver(object):
     def bruteForceAssume(self,i,j,values):
         atLeastOneChangeMade=False
         for val in values:
-            self.log('AssumptionMade : {0},{1} has value {2}'.format(i,j,val))
+            self.logger.info('AssumptionMade : {0},{1} has value {2}'.format(i,j,val))
             self.board.markValue(i,j,val)
             [atLeastOneChangeMade,updated_i,updated_j]=self.fullIterativePass()
 
             if not self.board.isBoardValid() or not atLeastOneChangeMade:
-                self.log('Assumption didnt work resetting board.')
+                self.logger.warn('Assumption didnt work resetting board.')
                 self.board.clearValues(updated_i,updated_j)
                 atLeastOneChangeMade=False
                 updated_i=[]
@@ -142,7 +142,7 @@ class SudokuSolver(object):
             [updatedBoard,new_updated_i,new_updated_j] = self.iterativePass()
             updated_i+=new_updated_i
             updated_j+=new_updated_j
-            self.log('Iteration Number : {0}'.format(inc))
+            self.logger.info('Iteration Number : {0}'.format(inc))
 
         return [atLeastOneChangeMade,updated_i,updated_j]
 
@@ -161,14 +161,14 @@ class SudokuSolver(object):
         self.backtrack(0)
 
     def backtrack(self,depth):
-        self.log('Enter AT depth : {0}'.format(depth))
+        self.logger.debug('Enter AT depth : {0}'.format(depth))
         if self.board.isBoardComplete():
             return True
         # get the first input with the least possible values
         possibleValuesCount=self.board.getPossibleValuesCount()
         [all_i,all_j]=np.where(possibleValuesCount != 0)
         if all_i.size == 0:
-            self.log('Exhausted all options')
+            self.logger.warn('Exhausted all options')
             return False
         for idx in range(0,all_i.size):
             i=all_i[idx]
@@ -176,7 +176,7 @@ class SudokuSolver(object):
             possibleValues=self.board.getPossibleValues(i,j)
 
             for val in possibleValues:
-                self.log('AssumptionMade : {0},{1} has value {2}'.format(i,j,val))
+                self.logger.info('AssumptionMade : {0},{1} has value {2}'.format(i,j,val))
                 self.board.markValue(i,j,val)
                 [atLeastOneChangeMade,updated_i,updated_j]=self.fullIterativePass()
 
@@ -191,4 +191,4 @@ class SudokuSolver(object):
 
                 self.board.clearValues(updated_i, updated_j)
 
-        self.log('Left AT depth : {0}'.format(depth))
+        self.logger.debug('Left AT depth : {0}'.format(depth))

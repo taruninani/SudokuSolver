@@ -40,8 +40,7 @@ class SudokuBoard(object):
         return np.array(list(range(1,self.numRows+1)))
 
     def clearValue(self, i, j):
-        self.markValue(i,j,self.dummy)
-        self.rebuildPossiblityMat()
+        self.clearValues([i],[j])
 
     def clearValues(self,all_i,all_j):
         for idx in range(0,len(all_i)):
@@ -59,6 +58,40 @@ class SudokuBoard(object):
                 if self.board[i,j] != self.dummy:
                     self.markValue(i,j,self.getValue(i,j).astype(int))
 
+    def updatePossibilityMat(self,i,j):
+        """
+        Update the Possibility Mat when i,j place is filled
+        Parameters
+        ----------
+        i
+        j
+
+        Returns
+        -------
+
+        """
+        # value filled out
+        val=self.board[i,j]
+        if self.numRows == 9:
+              # remove the possibilities for that position
+            self.possibleMat[i][j] = np.array([])
+            # remove it for column and row elements
+            for k in range(0, self.numRows):
+                self.removeValueAsPossiblity(i,k,val)
+                self.removeValueAsPossiblity(k,j,val)
+
+            # remove it for the subcell 3x3
+            subcell_i = int(i / 3)
+            subcell_j = int(j / 3)
+            for ii in range(0, int(self.numRows / 3)):
+                for jj in range(0, int(self.numCols / 3)):
+                    idx_i = ii + subcell_i * 3
+                    idx_j = jj + subcell_j * 3
+                    self.removeValueAsPossiblity(idx_i,idx_j,val)
+
+    def removeValueAsPossiblity(self,i,j,val):
+        self.possibleMat[i][j]=np.setdiff1d(self.possibleMat[i][j], val)
+
     def markValue(self, i, j, val):
         self.board[i, j] = val
         if val==self.dummy:
@@ -69,24 +102,7 @@ class SudokuBoard(object):
             self.leftValues[val - 1] -= 1
 
         # update the possiblity matrix
-        if self.numRows == 9:
-              # remove the possibilities for that position
-            self.possibleMat[i][j] = np.array([])
-            # remove it for column and row elements
-            for k in range(0, self.numRows):
-                self.possibleMat[i][k] = np.setdiff1d(self.possibleMat[i][k], val)
-                self.possibleMat[k][j] = np.setdiff1d(self.possibleMat[k][j], val)
-
-            # remove it for the subcell 3x3
-            subcell_i = int(i / 3)
-            subcell_j = int(j / 3)
-            for ii in range(0, int(self.numRows / 3)):
-                for jj in range(0, int(self.numCols / 3)):
-                    idx_i = ii + subcell_i * 3
-                    idx_j = jj + subcell_j * 3
-                    self.possibleMat[idx_i][idx_j] = np.setdiff1d(self.possibleMat[idx_i][idx_j], val)
-
-            # iterate through each
+        self.updatePossibilityMat(i,j)
 
     def getPossibleValues(self,i,j) -> np.array:
         return self.possibleMat[i][j]
@@ -106,6 +122,9 @@ class SudokuBoard(object):
                 if val in self.possibleMat[i][j]:
                     output[i,j]=1
         return output
+
+    def getFilledPlacesForValue(self,val):
+        return ((self.board==val) * 1)
 
     def isBoardComplete(self):
         validValues=self.getValidValues()
