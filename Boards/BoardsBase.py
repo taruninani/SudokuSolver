@@ -1,16 +1,16 @@
-from SudokuSolver.Utils import getLogger, Logger
+from ..Utils import getLogger, Logger
+from ..RuleSets import BaseRuleSet
 from typing import List
 import numpy as np
 
 class BoardsBase(object):
     log : Logger
-    ruleSet : List[int]
+    ruleSet : List[BaseRuleSet]
     board : np.array
     leftValues = None
-    shape = None
     dummy = None
 
-    def __init__(self,shape,ruleSet):
+    def __init__(self,shape):
         super().__init__()
         self.log=getLogger(__name__)
         self.dummy=np.int(0)
@@ -29,9 +29,17 @@ class BoardsBase(object):
         self.board[i,j]=number
 
     def isBoardComplete(self):
-        return ~np.any(self.board==self.dummy)
+        return ~np.any(self.board==self.dummy) and self.isBoardValid()
 
     def isBoardValid(self):
         # run the ruleSet validators
+        for rule in self.ruleSet:
+            check = rule.run()
+            if check is False:
+                return False
 
         return True
+
+    @property
+    def shape(self) -> tuple:
+        return self.board.shape
