@@ -1,2 +1,3 @@
-from SudokuSolver.Utils.Logger import getLogger
-from SudokuSolver.Utils.Logger import ColoredLogger as Logger
+from .Logger import getLogger
+from .Logger import ColoredLogger as Logger
+from .Exception import BaseException

@@ -1,5 +1,7 @@
 from .BaseRuleSet import BaseRuleSet, np
 
+
+@BaseRuleSet.register
 class ColumnRule(BaseRuleSet):
 
     def run(self) -> bool:
@@ -12,7 +14,7 @@ class ColumnRule(BaseRuleSet):
                 return False
         return True
 
-    def __getPlaces(self,i: np.int, j : np.int):
+    def __getPlaces__(self, i: np.int, j: np.int):
         row_idx=np.array(range(0,self._board.shape[0]),dtype=np.int)
         col_idx=np.full(self._board.shape[1],j,dtype=np.int)
 

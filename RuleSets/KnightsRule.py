@@ -1,6 +1,8 @@
 from .BaseRuleSet import BaseRuleSet, np
 import itertools
 
+
+@BaseRuleSet.register
 class KnightsRule(BaseRuleSet):
 
     def run(self) -> bool:
@@ -14,7 +16,7 @@ class KnightsRule(BaseRuleSet):
                     return False
         return True
 
-    def __getPlaces(self,i: np.int, j : np.int):
+    def __getPlaces__(self, i: np.int, j: np.int):
         idx_i = list(itertools.product([1, 2], [-1, 1]))
         idx_i += list(itertools.product([1, 2], [1, -1]))
         idx_j = list(itertools.product([2, 1], [1, -1]))

@@ -1,9 +1,9 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from ..Boards import BoardsBase
-from typing import List
 import numpy as np
 
-class BaseRuleSet(object):
+
+class BaseRuleSet(ABC):
 
     _board : BoardsBase
 
@@ -11,7 +11,7 @@ class BaseRuleSet(object):
         self._board=board
 
     def getAffectedPlaces(self, i : np.int, j : np.int) -> [np.array,np.array]:
-        [idx_i,idx_j]=self.__getPlaces(i,j)
+        [idx_i, idx_j] = self.__getPlaces__(i, j)
         [idx_i,idx_j]=self.__filterPos__(idx_i,idx_j)
         return [idx_i,idx_j]
 
@@ -27,6 +27,6 @@ class BaseRuleSet(object):
         pass
 
     @abstractmethod
-    def __getPlaces(self,i: np.int, j : np.int) -> [np.array,np.array]:
+    def __getPlaces__(self, i: np.int, j: np.int) -> [np.array, np.array]:
         pass
 

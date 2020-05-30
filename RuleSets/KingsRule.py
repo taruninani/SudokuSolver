@@ -1,6 +1,8 @@
 from .BaseRuleSet import BaseRuleSet, np
 import itertools
 
+
+@BaseRuleSet.register
 class KingsRule(BaseRuleSet):
 
     def run(self) -> bool:
@@ -14,7 +16,7 @@ class KingsRule(BaseRuleSet):
                     return False
         return True
 
-    def __getPlaces(self,i: np.int, j : np.int):
+    def __getPlaces__(self, i: np.int, j: np.int):
         temp = list(itertools.product([-1, 1], [1, -1]))
         temp += list(itertools.product([-1, 1], [0]))
         temp += list(itertools.product([0], [-1, 1]))

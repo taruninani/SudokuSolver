@@ -10,7 +10,7 @@ class BoardsBase(object):
     leftValues = None
     dummy = None
 
-    def __init__(self,shape):
+    def __init__(self, shape: tuple):
         super().__init__()
         self.log=getLogger(__name__)
         self.dummy=np.int(0)
