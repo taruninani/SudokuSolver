@@ -10,9 +10,11 @@ class SubGridRule(BaseRuleSet):
     def __init__(self, board: BoardsBase):
         super().__init__(board)
         if board.shape != (9, 9):
+            self.log.error('Rule only works for boards of shape (9, 9). Shape passed in ' + str(board.shape))
             raise BaseException('Rule only works for boards of shape (9, 9). Shape passed in ' + str(board.shape))
 
     def run(self) -> bool:
+        self.log.info('Running Rule')
         for i in range(0, self._board.shape[0], 3):
             for j in range(0, self._board.shape[1], 3):
                 [row_idx, col_idx] = self.getAffectedPlaces(i, j)

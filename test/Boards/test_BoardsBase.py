@@ -1,6 +1,7 @@
 from unittest import TestCase
 from SudokuSolver.Boards.BoardsBase import BoardsBase
 import numpy as np
+from SudokuSolver.Utils import BaseException
 import pytest
 
 
@@ -39,6 +40,25 @@ class TestBoardsBase(TestCase):
         board = BoardsBase((9, 9))
         board.placeNumberAt(4, 5, 5)
         self.assertEqual(board.board[4, 5], 5)
+        self.assertEqual(len(board.moves), 1)
+        mark = board.moves[0]
+        self.assertEqual(mark.i, 4)
+        self.assertEqual(mark.j, 5)
+        self.assertEqual(mark.number, 5)
+        self.assertEqual(mark.possibilityUpdated, [])
+
+    def test_undoOneMove(self):
+        board = BoardsBase((9, 9))
+        board.placeNumberAt(4, 5, 5)
+        self.assertEqual(board.board[4, 5], 5)
+        self.assertEqual(len(board.moves), 1)
+
+        board.undoOneMove()
+        self.assertEqual(len(board.moves), 0)
+        self.assertEqual(board.board[4, 5], board.dummy)
+
+        # one more undo would raise an error as no moves left to undo
+        self.assertRaises(BaseException, board.undoOneMove)
 
     # @pytest.skip('No way of testing this right now')
     def test_isBoardComplete(self):
