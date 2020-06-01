@@ -1,9 +1,7 @@
-from SudokuSolver.Boards import ClassicBoard, BoardsBase
-from SudokuSolver.RuleSets import BaseRuleSet
+from .BaseSolver import BaseSolver
+from ..Boards import BoardsBase
 import numpy as np
 from typing import List
-from SudokuSolver.Solvers.BaseSolver import BaseSolver
-
 
 class IterativeSolver(BaseSolver):
     _board: BoardsBase
