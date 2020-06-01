@@ -23,6 +23,16 @@ class BoardsBase(object):
         self.possibilityMat = np.ones(shape=(9, 9, 9), dtype=np.bool)
         self.log.info('Initialized Board')
 
+    def boardInput(self, input: np.array, dummy: np.int):
+        if input.shape != self.shape:
+            raise BaseException(
+                'Board shape is not the same! passed shape is {0} and Board shape is {1}'.format(input.shape,
+                                                                                                 self.shape))
+        for i in range(0, input.shape[0]):
+            for j in range(0, input.shape[1]):
+                if input[i, j] != dummy:
+                    self.placeNumberAt(i, j, input[i, j])
+
     def getNumberAt(self, i, j) -> np.int:
         number = self.board[i, j]
         self.log.debug('Position ({0},{1}) has value {2}'.format(i, j, number))
@@ -37,6 +47,10 @@ class BoardsBase(object):
 
     def placeNumberAt(self, i, j, number):
         self.log.info('Placing number {0} at ({1},{2})'.format(number, i, j))
+        if number == self.dummy:
+            self.log.warning('Attempting to place the dummy value, will skip!')
+            return
+
         self.board[i, j] = number
         # number-1 is the position of the number in the array
         markedIdx = []
