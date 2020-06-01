@@ -50,6 +50,9 @@ class BoardsBase(object):
         if number == self.dummy:
             self.log.warning('Attempting to place the dummy value, will skip!')
             return
+        if self.board[i, j] != self.dummy:
+            self.log.error('Placing number at already populated place!')
+            raise BaseException('Placing number at already populated place!')
 
         self.board[i, j] = number
         # number-1 is the position of the number in the array
@@ -60,7 +63,14 @@ class BoardsBase(object):
             for (ii, jj) in zip(idx_i, idx_j):
                 if self.possibilityMat[ii, jj, number - 1]:
                     self.possibilityMat[ii, jj, number - 1] = False
-                    markedIdx.append((ii, jj))
+                    markedIdx.append((ii, jj, number - 1))
+
+        # as the place has been populated
+        removePossibleVals = np.where(self.possibilityMat[i, j] == True)[0]
+        for val in removePossibleVals:
+            self.possibilityMat[i, j, val] = False
+            markedIdx.append((i, j, val))
+
         # create Mark object and mark the number
         mark = Mark(i, j, number, markedIdx)
         self.moves.append(mark)
@@ -71,8 +81,8 @@ class BoardsBase(object):
             raise BaseException('No moves to undo!')
         mark = self.moves.pop()
         self.board[mark.i, mark.j] = self.dummy
-        for (ii, jj) in mark.possibilityUpdated:
-            self.possibilityMat[ii, jj, mark.number - 1] = True
+        for (ii, jj, number) in mark.possibilityUpdated:
+            self.possibilityMat[ii, jj, number] = True
         self.log.info('Move Undone. Position ({0},{1}) has no number'.format(mark.i, mark.j))
 
     def isBoardComplete(self):

@@ -55,7 +55,8 @@ class ColoredLogger(logging.Logger):
 
 logging.setLoggerClass(ColoredLogger)
 
-def getLogger(name,level=logging.DEBUG):
+
+def getLogger(name, level=logging.INFO):
     logger=logging.getLogger(name)
     logger.setLevel(level)
     return logger

@@ -45,7 +45,15 @@ class TestBoardsBase(TestCase):
         self.assertEqual(mark.i, 4)
         self.assertEqual(mark.j, 5)
         self.assertEqual(mark.number, 5)
-        self.assertEqual(mark.possibilityUpdated, [])
+        self.assertEqual(mark.possibilityUpdated, [(4, 5, 0),
+                                                   (4, 5, 1),
+                                                   (4, 5, 2),
+                                                   (4, 5, 3),
+                                                   (4, 5, 4),
+                                                   (4, 5, 5),
+                                                   (4, 5, 6),
+                                                   (4, 5, 7),
+                                                   (4, 5, 8)])
 
     def test_undoOneMove(self):
         board = BoardsBase((9, 9))
